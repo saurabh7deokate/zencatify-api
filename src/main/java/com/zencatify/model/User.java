@@ -5,15 +5,17 @@ import java.util.Set;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import lombok.Data;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Data
 public class User {
 
 	@Id
@@ -21,31 +23,36 @@ public class User {
 	private int userId;
 
 	@Column(unique = true)
+	@NotBlank(message = "Username is required")
 	private String userName;
 
+	@NotBlank(message = "Password is required")
 	private String userPassword;
 
 	private String fullName;
 
 	@Column(unique = true)
-	private long userPhone;
+	@NotNull(message = "Phone number is required")
+	private Long userPhone;
 
 	@Column(unique = true)
+	@NotBlank(message = "Email is required")
+	@Email(message = "Email should be valid")
 	private String userEmail;
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private Set<Product> products;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<UserOrder> userOrders;
 
 	@OneToOne(mappedBy = "user")
 	private Cart cart;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Payment> paymentMethods;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Address> addresses;
 
 	public int getUserId() {

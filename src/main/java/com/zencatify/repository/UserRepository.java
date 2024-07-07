@@ -8,6 +8,6 @@ import com.zencatify.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-	User findByUserName(String userName);
+	public abstract User findByUserName(String userName);
 
 }

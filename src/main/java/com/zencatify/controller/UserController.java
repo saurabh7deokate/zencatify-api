@@ -44,11 +44,19 @@ public class UserController {
 	@PostMapping("/register")
 	public ResponseEntity<GenericResponse<String>> registerUser(@Valid @RequestBody @NotNull User user) {
 		logger.info("Initial user registration request body: {}", user);
-		userService.registerUser(user);
-		GenericResponse<String> genericResponse = new GenericResponseBuilder<String>()
-				.setMessage(USER_REGISTER_SUCCESS_MESSAGE).setStatus(HttpStatus.OK.value()).build();
-		logger.info("User registered successfully: {}", user);
-		return ResponseEntity.ok(genericResponse);
+		try {
+			userService.registerUser(user);
+			GenericResponse<String> genericResponse = new GenericResponseBuilder<String>()
+					.setMessage(USER_REGISTER_SUCCESS_MESSAGE).setStatus(HttpStatus.OK.value()).build();
+			logger.info("User registered successfully: {}", user);
+			return ResponseEntity.ok(genericResponse);
+		}
+		catch (Exception e) {
+			GenericResponse<String> errorResponse = new GenericResponseBuilder<String>()
+					.setMessage(USER_REGISTER_FAIL_MESSAGE).setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value()).build();
+			logger.info("User registration failed: {}", user);
+			return ResponseEntity.internalServerError().body(errorResponse);
+		}
 	}
 
 	@GetMapping("/login")

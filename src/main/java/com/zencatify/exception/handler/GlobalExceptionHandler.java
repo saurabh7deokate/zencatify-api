@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<GenericResponse<String>> handle(UserNotFoundException exception) {
 		GenericResponse<String> errorResponse = GlobalExceptionHandler.setResponse(exception, HttpStatus.NOT_FOUND,
 				exception.getMessage() + ", please try again");
-		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorResponse, HttpStatus. OK);
 	}
 
 	@ExceptionHandler(PasswordMissMatchException.class)
